@@ -1,0 +1,27 @@
+<div class="card-container">
+<mat-card class="card">
+    <mat-card-header>
+      <mat-card-title>Вход</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="no-bottom-margin">
+        <form name="authForm" #authForm="ngForm">
+            <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Адрес почты</mat-label>
+              <input name="authEmail" [(ngModel)]="email" #_email="ngModel" matInput required email>
+              <mat-error class="error-message" *ngIf="_email.invalid">Некорректный адрес</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Пароль</mat-label>
+              <input name="authPassword" [(ngModel)]="password" #_password="ngModel" matInput
+                [type]="hidePass ? 'password' : 'text'" autocomplete="off" required>
+              <mat-icon matSuffix (click)="hidePass = !hidePass" class="active">{{hidePass ? 'visibility' : 'visibility_off'}}</mat-icon>
+            </mat-form-field>
+        </form>
+    </mat-card-content>
+    <mat-card-actions class="login-actions">
+            <button mat-raised-button class="login-btn" (click)="openDialog()">Сбросить пароль</button>
+            <button mat-raised-button class="login-btn" color="primary" [disabled]="authForm.invalid && authForm.dirty"
+              (click)="signIn()">Войти</button>
+    </mat-card-actions>
+  </mat-card>
+</div>

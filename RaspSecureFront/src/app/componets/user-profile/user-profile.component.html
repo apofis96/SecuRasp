@@ -1,0 +1,65 @@
+<div class="card-container">
+    <mat-card class="card">
+        <div *ngIf="!currentUser" class="spinner">
+            <mat-spinner style="margin: auto;"></mat-spinner>
+        </div>
+        <div *ngIf="currentUser">
+        <mat-card-header>
+          <mat-card-title>Профиль</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <h3 mat-subheader class="profile">Почта</h3>
+            <form name="emailForm" #emailForm="ngForm" [(matTooltip)]="toolMsg" matTooltipPosition="right" matTooltipShowDelay="300">
+                <mat-form-field appearance="standard" class="form-field">
+                  <input name="authEmail" [(ngModel)]="currentUser.email" #_email="ngModel" disabled matInput required email>
+                  <mat-error class="error-message" *ngIf="_email.invalid">Некорректный адрес</mat-error>
+                </mat-form-field>
+                </form>
+            <mat-divider></mat-divider>
+            <h3 mat-subheader class="profile">Имя</h3>
+            <form name="nameForm" #nameForm="ngForm">
+                <mat-form-field appearance="standard" class="form-field">
+                  <input name="authName" [(ngModel)]="currentUser.userName" #_userName="ngModel" [(disabled)] ="nameWait" matInput required pattern=".{1,40}">
+                  <mat-icon matSuffix *ngIf="nameForm.invalid">error</mat-icon>
+                  <mat-icon matSuffix *ngIf="nameForm.valid" class="active" (click)="save()" matTooltip="Сохранить" matTooltipPosition="right">save</mat-icon>
+                  <mat-error class="error-message" *ngIf="_userName.invalid">До 40 символов</mat-error>
+                </mat-form-field>
+                <mat-progress-bar *ngIf="nameWait" mode="indeterminate"></mat-progress-bar>
+                </form>
+            <mat-divider></mat-divider>
+            <h3 mat-subheader class="profile">Уровень доступа</h3>
+            <mat-form-field appearance="standard" class="form-field" [(matTooltip)]="toolMsg" matTooltipPosition="right" matTooltipShowDelay="300">
+                <select matNativeControl disabled> 
+                  <option [selected]="currentUser.role === 0" value="0">Неактивированный</option>
+                  <option [selected]="currentUser.role === 1" value="1">Администратор</option>
+                  <option [selected]="currentUser.role === 2" value="2">Редактирование</option>
+                  <option [selected]="currentUser.role === 3" value="3">Просмотр</option>
+                  <option [selected]="currentUser.role === 4" value="4">Терминал</option>
+                  </select>
+              </mat-form-field>
+            <mat-divider></mat-divider>
+            <h3 mat-subheader style="margin: 0.5em 0 -0.5em 0px;" >Новый пароль</h3>
+            <form name="passwordForm" #passwordForm="ngForm">
+            <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Пароль</mat-label>
+              <input name="authPassword" [(ngModel)]="password" #_password="ngModel" matInput
+                [type]="hidePass ? 'password' : 'text'" autocomplete="off" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
+              <mat-icon matSuffix (click)="hidePass = !hidePass" class="active">{{hidePass ? 'visibility' : 'visibility_off'}}</mat-icon>
+              <mat-hint>Не менее 8 символов. Должен содерать строчный, прописной и цифровой символы</mat-hint>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Повторите Пароль</mat-label>
+              <input name="authPasswordRe" [(ngModel)]="passwordRe" #_passwordRe="ngModel" matInput
+                [type]="hidePassRe ? 'password' : 'text'" autocomplete="off" required pattern="{{ _password.value }}">
+              <mat-icon matSuffix (click)="hidePassRe = !hidePassRe" class="active">{{hidePassRe ? 'visibility' : 'visibility_off'}}</mat-icon>
+              <mat-error class="error-message" *ngIf="_passwordRe.invalid">Пароли не совпадают</mat-error>
+            </mat-form-field>
+            </form>
+        </mat-card-content>
+        <mat-card-actions class="login-actions">
+            <button mat-raised-button class="login-btn" color="primary" [disabled]="passwordForm.invalid"
+            (click)="editPassword()">Сохранить пароль</button>
+        </mat-card-actions>
+    </div>
+      </mat-card>
+</div>

@@ -1,0 +1,45 @@
+    <div class="card-container">
+        <mat-card class="card">
+            <div *ngIf="isLoading" class="spinner">
+                <mat-spinner style="margin: auto;"></mat-spinner>
+            </div>
+            <div *ngIf="!isLoading">
+            <mat-card-header>
+              <mat-card-title>Регистрация</mat-card-title>
+            </mat-card-header>
+            <mat-card *ngIf="!isAdminExist" class="warn">Вы будете назначены администратором!<br>Внимательно вводите Почту и Пароль.</mat-card>
+            <mat-card-content class="no-bottom-margin">
+                <form name="authForm" #authForm="ngForm">
+                    <mat-form-field appearance="outline" class="form-field">
+                    <mat-label>Адрес почты</mat-label>
+                      <input name="authEmail" [(ngModel)]="email" #_email="ngModel" matInput required email>
+                      <mat-error class="error-message" *ngIf="_email.invalid">Некорректный адрес</mat-error>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="form-field">
+                        <mat-label>Имя</mat-label>
+                          <input name="authName" [(ngModel)]="name" #_name="ngModel" matInput required pattern=".{1,40}">
+                          <mat-error class="error-message" *ngIf="_name.invalid">До 40 символов</mat-error>
+                        </mat-form-field>
+                    <mat-form-field appearance="outline" class="form-field">
+                        <mat-label>Пароль</mat-label>
+                      <input name="authPassword" [(ngModel)]="password" #_password="ngModel" matInput
+                        [type]="hidePass ? 'password' : 'text'" autocomplete="off" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
+                      <mat-icon matSuffix (click)="hidePass = !hidePass" class="active">{{hidePass ? 'visibility' : 'visibility_off'}}</mat-icon>
+                      <mat-hint>Не менее 8 символов. Должен содерать строчный, прописной и цифровой символы</mat-hint>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="form-field">
+                        <mat-label>Повторите Пароль</mat-label>
+                      <input name="authPasswordRe" [(ngModel)]="passwordRe" #_passwordRe="ngModel" matInput
+                        [type]="hidePassRe ? 'password' : 'text'" autocomplete="off" required pattern="{{ _password.value }}">
+                      <mat-icon matSuffix (click)="hidePassRe = !hidePassRe" class="active">{{hidePassRe ? 'visibility' : 'visibility_off'}}</mat-icon>
+                      <mat-error class="error-message" *ngIf="_passwordRe.invalid">Пароли не совпадают</mat-error>
+                    </mat-form-field>
+                </form>
+            </mat-card-content>
+            <mat-card-actions class="login-actions">
+                    <button mat-raised-button class="login-btn" color="primary" [disabled]="authForm.invalid"
+                      (click)="signUp()">Зарегистрироваться</button>
+            </mat-card-actions>
+        </div>
+          </mat-card>
+</div>

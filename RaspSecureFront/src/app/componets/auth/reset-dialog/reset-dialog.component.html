@@ -1,0 +1,15 @@
+<h1 mat-dialog-title>Сброс пароля</h1>
+<mat-dialog-content>
+    <form name="authForm" #authForm="ngForm">
+        <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Адрес почты</mat-label>
+          <input name="authEmail" [(ngModel)]="email" #_email="ngModel" matInput required email>
+          <mat-error class="error-message" *ngIf="_email.invalid">Некорректный адрес</mat-error>
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions class="login-actions">
+  <button mat-raised-button class="login-btn" (click)="onClose()">Закрыть</button>
+  <button mat-raised-button class="login-btn" color="primary" [disabled]="authForm.invalid"
+    [mat-dialog-close]="email" cdkFocusInitial>Сбросить</button>
+</mat-dialog-actions>

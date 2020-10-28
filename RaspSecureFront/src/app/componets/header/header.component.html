@@ -1,0 +1,29 @@
+<mat-toolbar color="primary">
+    <button mat-icon-button (click)="snav.toggle()">
+        <mat-icon>menu</mat-icon>
+    </button>
+    <a mat-flat-button color="primary" routerLink="/" style="font-size: 1em;"><mat-icon class="logo">shield</mat-icon>RaspSecure</a>
+    <span class="spacer"></span>
+    <span *ngIf="!authorizedUser">
+        <a mat-button routerLink="login"><mat-icon>login</mat-icon> Вход</a>
+        <a mat-button routerLink="registration">Регистрация</a>
+    </span>
+    <span *ngIf="authorizedUser">
+        <a mat-button routerLink="profile"><mat-icon>person</mat-icon> {{authorizedUser.userName}}</a>
+        <button mat-icon-button matTooltip="Выход" (click)="logout()">
+            <mat-icon>logout</mat-icon>
+          </button>
+    </span>
+</mat-toolbar>
+<mat-sidenav-container class="main-content">
+    <mat-sidenav #snav mode="side">
+      <mat-nav-list>
+        <a mat-list-item routerLink="/" >Test1</a>
+        <a mat-list-item routerLink="/" >Test2</a>
+        <a mat-list-item routerLink="/" >Test3</a>
+      </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <router-outlet></router-outlet>
+    </mat-sidenav-content>
+</mat-sidenav-container>
