@@ -9,16 +9,16 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ErrorInterceptor } from './helpers/error.interceptor';
 import { JwtInterceptor } from './helpers/jwt.interceptor';
-import { LoginFormComponent } from './componets/auth/login-form/login-form.component';
-import { RegistrationFormComponent } from './componets/auth/registration-form/registration-form.component';
-import { ResetFormComponent } from './componets/auth/reset-form/reset-form.component';
-import { SecurityCodeListComponent } from './componets/security-code-list/security-code-list.component';
-import { AccessHistoryComponent } from './componets/access-history/access-history.component';
-import { MainComponent } from './componets/main/main.component';
-import { MaterialModule } from './componets/common/material-components.module';
-import { HeaderComponent } from './componets/header/header.component';
-import { ResetDialogComponent } from './componets/auth/reset-dialog/reset-dialog.component';
-import { UserProfileComponent } from './componets/user-profile/user-profile.component';
+import { LoginFormComponent } from './components/auth/login-form/login-form.component';
+import { RegistrationFormComponent } from './components/auth/registration-form/registration-form.component';
+import { ResetFormComponent } from './components/auth/reset-form/reset-form.component';
+import { SecurityCodeListComponent } from './components/security-code-list/security-code-list.component';
+import { AccessHistoryComponent } from './components/access-history/access-history.component';
+import { MainComponent } from './components/main/main.component';
+import { MaterialModule } from './components/common/material-components.module';
+import { HeaderComponent } from './components/header/header.component';
+import { ResetDialogComponent } from './components/auth/reset-dialog/reset-dialog.component';
+import { UserProfileComponent } from './components/user-profile/user-profile.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +31,7 @@ import { UserProfileComponent } from './componets/user-profile/user-profile.comp
     MainComponent,
     HeaderComponent,
     ResetDialogComponent,
-    UserProfileComponent
+    UserProfileComponent,
   ],
   imports: [
     BrowserModule,
