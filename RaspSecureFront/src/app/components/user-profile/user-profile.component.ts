@@ -6,6 +6,7 @@ import { RolesEnum } from 'src/app/models/common/role-enum';
 import { User } from 'src/app/models/user';
 import { AuthenticationService } from 'src/app/services/auth.service';
 import { EventService } from 'src/app/services/event.service';
+import { NotificationService } from 'src/app/services/notification.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -29,6 +30,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     private eventService: EventService,
     private userService: UserService,
     private router: Router,
+    private notify: NotificationService
   ) { }
 
   ngOnInit(): void {
@@ -65,12 +67,11 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     .pipe(takeUntil(this.unsubscribe$)).subscribe(
             () => {
                 this.authService.setUser(this.currentUser);
-                //this.snackBarService.showUsualMessage('Successfully updated');
+                this.notify.showNotification('Значение обновлено.');
                 this.nameWait = false;
             },
             (error) => {
-                //this.snackBarService.showErrorMessage(error);
-                console.log(error);
+                this.notify.showError(error);
                 this.nameWait = false;
             }
         );
@@ -87,7 +88,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe(() => this.router.navigate(['/profile']), (error) => console.log(error));
       },
-      (error) => console.log(error)
+      (error) => this.notify.showError(error)
     );
   }
 }

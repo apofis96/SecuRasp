@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AuthenticationService } from 'src/app/services/auth.service';
+import { NotificationService } from 'src/app/services/notification.service';
 import { ResetDialogComponent } from '../reset-dialog/reset-dialog.component';
 
 @Component({
@@ -16,11 +17,13 @@ export class LoginFormComponent implements OnInit, OnDestroy {
   public password: string;
   public email: string;
   private unsubscribe$ = new Subject<void>();
+  public isLoading = false;
 
   constructor(
     private authService: AuthenticationService,
     private router: Router,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private notify: NotificationService
   ) { }
 
   ngOnInit(): void {
@@ -32,10 +35,15 @@ export class LoginFormComponent implements OnInit, OnDestroy {
   }
 
   public signIn(): void {
+    this.isLoading = true;
     this.authService
         .login({ email: this.email, password: this.password })
         .pipe(takeUntil(this.unsubscribe$))
-        .subscribe(() => this.router.navigate(['/']), (error) => console.log(error));
+        .subscribe(() => this.router.navigate(['/']),
+        (error) => {
+            this.isLoading = false;
+            this.notify.showError(error);
+        });
   }
 
   openDialog(): void {
@@ -44,12 +52,19 @@ export class LoginFormComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
       if (result) {
+        this.isLoading = true;
         this.authService
             .reset(result, window.location.host)
             .pipe(takeUntil(this.unsubscribe$))
-            .subscribe((response) => console.log(response), (error) => console.log(error));
+            .subscribe((response) => {
+              this.isLoading = false;
+              this.notify.showNotification('Ссылка для сброса отправлена Вам на почту.');
+            },
+            (error) => {
+              this.isLoading = false;
+              this.notify.showError(error);
+            });
       }
     });
   }

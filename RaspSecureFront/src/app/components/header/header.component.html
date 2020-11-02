@@ -1,5 +1,5 @@
 <mat-toolbar color="primary">
-    <button mat-icon-button (click)="snav.toggle()">
+    <button *ngIf="navigationAllowed" mat-icon-button (click)="snav.toggle()">
         <mat-icon>menu</mat-icon>
     </button>
     <a mat-flat-button color="primary" routerLink="/" style="font-size: 1em;"><mat-icon class="logo">shield</mat-icon>RaspSecure</a>
@@ -17,10 +17,10 @@
 </mat-toolbar>
 <mat-sidenav-container class="main-content">
     <mat-sidenav #snav mode="side">
-      <mat-nav-list style="padding-bottom: 8px;">
-        <a mat-list-item routerLink="/" ><mat-icon class="nav-icon">history</mat-icon> История</a>
-        <a mat-list-item routerLink="/" ><mat-icon class="nav-icon">vpn_key</mat-icon> Коды доступа</a>
-        <a mat-list-item routerLink="/" ><mat-icon class="nav-icon">people_alt</mat-icon> Пользователи</a>
+      <mat-nav-list *ngIf="navigationAllowed" style="padding-bottom: 8px;">
+        <a mat-list-item routerLink="history" [routerLinkActive]="['is-active']"><mat-icon class="nav-icon">history</mat-icon> История</a>
+        <a mat-list-item routerLink="codes" [routerLinkActive]="['is-active']"><mat-icon class="nav-icon">vpn_key</mat-icon> Коды доступа</a>
+        <a mat-list-item routerLink="users" [routerLinkActive]="['is-active']"><mat-icon class="nav-icon">people_alt</mat-icon> Пользователи</a>
       </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content>

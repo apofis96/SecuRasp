@@ -30,11 +30,7 @@
             <h3 mat-subheader class="profile">Уровень доступа</h3>
             <mat-form-field appearance="standard" class="form-field" [(matTooltip)]="toolMsg" matTooltipPosition="right" matTooltipShowDelay="300">
                 <select matNativeControl disabled> 
-                  <option [selected]="currentUser.role === 0" value="0">Неактивированный</option>
-                  <option [selected]="currentUser.role === 1" value="1">Администратор</option>
-                  <option [selected]="currentUser.role === 2" value="2">Редактирование</option>
-                  <option [selected]="currentUser.role === 3" value="3">Просмотр</option>
-                  <option [selected]="currentUser.role === 4" value="4">Терминал</option>
+                  <option [selected]="currentUser.role" value="0"> {{ currentUser.role | role }}</option>
                   </select>
               </mat-form-field>
             <mat-divider></mat-divider>

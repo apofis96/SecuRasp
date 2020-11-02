@@ -6,7 +6,6 @@ using RaspSecure.Models.Auth;
 using RaspSecure.Models.DTO;
 using RaspSecure.Models.Exceptions;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -25,16 +24,32 @@ namespace RaspSecure.Services
             return !(admin is null);
         }
 
-        public async Task<ICollection<UserDTO>> GetUsers()
+        public async Task<UsersListD> GetUsers(string sort, int page, int size, bool unactive)
         {
-           return await _context.Users.Select(u =>
+            var query = _context.Users.Select(u =>
                 new UserDTO
                 {
                     Id = u.Id,
                     Email = u.Email,
                     UserName = u.UserName,
-                    Role = u.Role
-                }).ToListAsync();
+                    Role = u.Role,
+                    CreatedAt = u.CreatedAt
+                });
+            if (sort == "asc")
+                query = query.OrderBy(u => u.Id);
+            else
+                query = query.OrderByDescending(u => u.Id);
+            query = query.Where(u => u.Role != RolesEnum.Terminal);
+            if (unactive)
+                query = query.Where(u => u.Role == RolesEnum.Deactivated);
+            var count = await query.CountAsync();
+            var userList = await query.Skip(page * size).Take(size).ToListAsync();
+
+            return new UsersListD()
+            { 
+                Items = count,
+                Users = userList 
+            };
         }
 
         public async Task<UserDTO> GetUserById(int id)
@@ -48,7 +63,8 @@ namespace RaspSecure.Services
                 Id = user.Id,
                 Email = user.Email,
                 UserName = user.UserName,
-                Role = user.Role
+                Role = user.Role,
+                CreatedAt = user.CreatedAt
             };
         }
 
@@ -83,7 +99,8 @@ namespace RaspSecure.Services
                 Id = userEntity.Id,
                 Email = userEntity.Email,
                 UserName = userEntity.UserName,
-                Role = userEntity.Role
+                Role = userEntity.Role,
+                CreatedAt = userEntity.CreatedAt
             };
         }
 
@@ -95,10 +112,25 @@ namespace RaspSecure.Services
             if (userEntity is null)
                 throw new NotFoundException(nameof(UserEntity), userDTO.Id);
 
-            var timeNow = DateTimeOffset.Now;
+            userEntity.UserName = userDTO.UserName;
+            userEntity.UpdatedAt = DateTimeOffset.Now;
+
+            _context.Users.Update(userEntity);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task AdminUserEdit(UserDTO userDTO, int userId)
+        {
+            if (userId == userDTO.Id)
+                throw new InvalidUsernameOrPasswordException();
+            var userEntity = await _context.Users.FirstOrDefaultAsync(u => u.Id == userDTO.Id);
+            if (userEntity is null)
+                throw new NotFoundException(nameof(UserEntity), userDTO.Id);
 
             userEntity.UserName = userDTO.UserName;
-            userEntity.UpdatedAt = timeNow;
+            userEntity.Email = userDTO.Email;
+            userEntity.Role = userDTO.Role;
+            userEntity.UpdatedAt = DateTimeOffset.Now;
 
             _context.Users.Update(userEntity);
             await _context.SaveChangesAsync();

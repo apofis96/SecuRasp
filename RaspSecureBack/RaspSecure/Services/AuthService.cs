@@ -40,7 +40,8 @@ namespace RaspSecure.Services
                 Id = userEntity.Id,
                 Email = userEntity.Email,
                 UserName = userEntity.UserName,
-                Role = userEntity.Role
+                Role = userEntity.Role,
+                CreatedAt = userEntity.CreatedAt
             };
 
             return new AuthUserDTO

@@ -26,6 +26,7 @@ export class AuthenticationService {
                 map((resp) => {
                     this.user = resp.body;
                     this.eventService.userChanged(this.user);
+                    this._setRole(resp.body);
                     return this.user;
                 })
             );
@@ -33,6 +34,7 @@ export class AuthenticationService {
 
     public setUser(user: User) {
         this.user = user;
+        this._setRole(user);
         this.eventService.userChanged(user);
     }
 
@@ -80,18 +82,20 @@ export class AuthenticationService {
     public removeTokensFromStorage() {
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
+        localStorage.removeItem('roleToken');
     }
 
     public refreshTokens() {
+        console.log('refresh');
         return this.httpService
-            .postFullRequest<AccessTokenDto>(`${this.routePrefix}/token/refresh`, {
+            .postRequest<AccessTokenDto>(`${this.routePrefix}/token/refresh`, {
                 accessToken: JSON.parse(localStorage.getItem('accessToken')),
                 refreshToken: JSON.parse(localStorage.getItem('refreshToken'))
             })
             .pipe(
                 map((resp) => {
-                    this._setTokens(resp.body);
-                    return resp.body;
+                    this._setTokens(resp);
+                    return resp;
                 })
             );
     }
@@ -101,6 +105,7 @@ export class AuthenticationService {
             map((resp) => {
                 this._setTokens(resp.body.token);
                 this.user = resp.body.user;
+                this._setRole(resp.body.user);
                 this.eventService.userChanged(resp.body.user);
                 return resp.body.user;
             })
@@ -108,10 +113,27 @@ export class AuthenticationService {
     }
 
     private _setTokens(tokens: AccessTokenDto) {
+        console.log('Try set');
         if (tokens && tokens.accessToken && tokens.refreshToken) {
+            console.log(JSON.stringify(tokens.accessToken.token));
             localStorage.setItem('accessToken', JSON.stringify(tokens.accessToken.token));
             localStorage.setItem('refreshToken', JSON.stringify(tokens.refreshToken));
             this.getUser();
         }
+    }
+
+    private _setRole(user: User) {
+        const tmpToken = localStorage.getItem('roleToken');
+        localStorage.setItem('roleToken', JSON.stringify(user.role));
+        if (tmpToken && tmpToken !==  user.role.toString()){
+            console.log('Attempt');
+            this.refreshTokens().subscribe();
+        }
+        console.log('Done');
+        this.eventService.roleChanged();
+    }
+
+    public getRole(): RolesEnum {
+        return Number(localStorage.getItem('roleToken'));
     }
 }

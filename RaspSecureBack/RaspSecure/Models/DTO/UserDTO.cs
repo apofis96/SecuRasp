@@ -1,4 +1,5 @@
 ﻿using RaspSecure.Models.Auth;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace RaspSecure.Models.DTO
@@ -13,5 +14,8 @@ namespace RaspSecure.Models.DTO
         [MinLength(1)]
         public string UserName { get; set; }
         public RolesEnum Role { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
+
+
     }
 }

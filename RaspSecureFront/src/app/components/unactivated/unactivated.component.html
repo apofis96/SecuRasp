@@ -1,0 +1,21 @@
+<div class="card-container">
+    <mat-card class="card">
+        <mat-card-header>
+          <mat-card-title>Нет Доступа</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <div class="content"><h3>
+                Ваша учётна запись не активирована.
+            </h3>
+            <p>
+                Для акивации свяжитесь с администратором.
+            </p>
+        </div>
+            <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+        </mat-card-content>
+        <mat-card-actions class="login-actions">
+                <button mat-raised-button class="login-btn" color="primary"
+                  (click)="onBtnClick()"> Продолжить </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>

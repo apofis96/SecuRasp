@@ -9,47 +9,63 @@ import { ResetFormComponent } from './components/auth/reset-form/reset-form.comp
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { AccessHistoryComponent } from './components/access-history/access-history.component';
 import { SecurityCodeListComponent } from './components/security-code-list/security-code-list.component';
+import { UserListComponent } from './components/user-list/user-list.component';
+import { UnactivatedComponent } from './components/unactivated/unactivated.component';
 
 const routes: Routes = [
   { path: '', component: MainComponent, pathMatch: 'full', canActivate: [AuthGuard],
   data: {
     isLogged: true,
-    redirect: 'login'
+    redirect: 'login',
+    unactivated: true
   } as GuardData },
   { path: 'profile', component: UserProfileComponent, pathMatch: 'full', canActivate: [AuthGuard],
   data: {
     isLogged: true,
-    redirect: 'login'
+    redirect: 'login',
+    unactivated: false
   } as GuardData },
   { path: 'history', component: AccessHistoryComponent, pathMatch: 'full', canActivate: [AuthGuard],
   data: {
     isLogged: true,
-    redirect: 'login'
+    redirect: 'login',
+    unactivated: true
   } as GuardData },
-  { path: 'code', component: SecurityCodeListComponent, pathMatch: 'full', canActivate: [AuthGuard],
+  { path: 'codes', component: SecurityCodeListComponent, pathMatch: 'full', canActivate: [AuthGuard],
   data: {
     isLogged: true,
-    redirect: 'login'
+    redirect: 'login',
+    unactivated: true
   } as GuardData },
-  { path: 'history', component: AccessHistoryComponent, pathMatch: 'full', canActivate: [AuthGuard],
+  { path: 'users', component: UserListComponent, pathMatch: 'full', canActivate: [AuthGuard],
   data: {
     isLogged: true,
-    redirect: 'login'
+    redirect: 'login',
+    unactivated: true
   } as GuardData },
   { path: 'login', component: LoginFormComponent, pathMatch: 'full', canActivate: [AuthGuard],
   data: {
     isLogged: false,
-    redirect: '/'
+    redirect: '/',
+    unactivated: false
   } as GuardData },
   { path: 'registration', component: RegistrationFormComponent, pathMatch: 'full', canActivate: [AuthGuard],
   data: {
     isLogged: false,
-    redirect: '/'
+    redirect: '/',
+    unactivated: false
   } as GuardData },
   { path: 'reset/:token', component: ResetFormComponent, canActivate: [AuthGuard],
   data: {
     isLogged: false,
-    redirect: '/'
+    redirect: '/',
+    unactivated: false
+  } as GuardData },
+  { path: 'unactivated', component: UnactivatedComponent, pathMatch: 'full', canActivate: [AuthGuard],
+  data: {
+    isLogged: true,
+    redirect: 'login',
+    unactivated: false
   } as GuardData },
   { path: '**', redirectTo: '' }
 ];

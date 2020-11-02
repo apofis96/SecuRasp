@@ -63,7 +63,6 @@ export class HttpInternalService {
     }
 
     public buildUrl(url: string): string {
-        console.log('AAAAAAAAAAAAAAAA');
         console.log(url);
         if (url.startsWith('http://') || url.startsWith('https://')) {
             return url;

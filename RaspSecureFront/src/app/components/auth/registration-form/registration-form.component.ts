@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AuthenticationService } from 'src/app/services/auth.service';
+import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
   selector: 'app-registration-form',
@@ -22,7 +23,8 @@ export class RegistrationFormComponent implements OnInit, OnDestroy {
 
   constructor(
     private authService: AuthenticationService,
-    private router: Router
+    private router: Router,
+    private notify: NotificationService
   ) { }
 
   ngOnInit(): void {
@@ -32,7 +34,7 @@ export class RegistrationFormComponent implements OnInit, OnDestroy {
         this.isAdminExist = response.body;
         this.isLoading = false;
       },
-      (error) => console.log(error));
+      (error) => this.notify.showError(error));
   }
 
   public ngOnDestroy(): void {
@@ -45,11 +47,10 @@ export class RegistrationFormComponent implements OnInit, OnDestroy {
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe((response) =>
     {
-      console.log(response);
       if (this.isAdminExist) {
         this.router.navigate(['/']);
       }
     },
-    (error) => console.log(error));
+    (error) => this.notify.showError(error));
   }
 }

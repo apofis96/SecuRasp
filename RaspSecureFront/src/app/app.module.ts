@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -19,6 +19,14 @@ import { MaterialModule } from './components/common/material-components.module';
 import { HeaderComponent } from './components/header/header.component';
 import { ResetDialogComponent } from './components/auth/reset-dialog/reset-dialog.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
+import { UserListComponent } from './components/user-list/user-list.component';
+import { RolePipe } from './helpers/role.pipe';
+import { registerLocaleData } from '@angular/common';
+import localeRu from '@angular/common/locales/ru';
+import { EditDialogComponent } from './components/common/edit-dialog/edit-dialog.component';
+import { UnactivatedComponent } from './components/unactivated/unactivated.component';
+
+registerLocaleData(localeRu, 'ru');
 
 @NgModule({
   declarations: [
@@ -32,6 +40,10 @@ import { UserProfileComponent } from './components/user-profile/user-profile.com
     HeaderComponent,
     ResetDialogComponent,
     UserProfileComponent,
+    UserListComponent,
+    RolePipe,
+    EditDialogComponent,
+    UnactivatedComponent
   ],
   imports: [
     BrowserModule,
@@ -42,12 +54,10 @@ import { UserProfileComponent } from './components/user-profile/user-profile.com
     ReactiveFormsModule,
     MaterialModule,
   ],
-  exports: [
-    MaterialModule,
-  ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: LOCALE_ID, useValue: 'ru' }
   ],
   bootstrap: [AppComponent]
 })

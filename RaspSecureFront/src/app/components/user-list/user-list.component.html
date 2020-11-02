@@ -1,1 +1,60 @@
-<p>user-list works!</p>
+<button mat-raised-button class="table-btn" (click)="onToggleClick()"> {{toggleText}} </button>
+
+<div class="container mat-elevation-z8" [ngStyle]="{'min-height.px': widthCont}">
+  <div class="loading-shade" *ngIf="isLoadingResults || isLoadError">
+    <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+    <div class="rate-limit-reached" *ngIf="isLoadError">
+      Ошибка связи с сервером
+    </div>
+  </div>
+
+  <div class="table-container">
+
+    <table mat-table [dataSource]="data" class="table" matSort matSortActive="id" matSortDisableClear matSortDirection="desc">
+
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>
+          ID
+        </th>
+        <td mat-cell *matCellDef="let row">{{row.id}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef>Почта</th>
+        <td mat-cell *matCellDef="let row">
+          <div class="cell-container"><span class="cell-content">{{row.email}}</span>
+          <button mat-icon-button color="primary" matTooltip="Редактировать" matTooltipPosition="right" (click)="openDialog(0, row.email, row)" [disabled]="currentUser.id === row.id">
+            <mat-icon>edit</mat-icon>
+          </button>
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Имя</th>
+        <td mat-cell *matCellDef="let row">
+          <div class="cell-container"><span class="cell-content">{{row.userName}}</span>
+            <button mat-icon-button color="primary" matTooltip="Редактировать" matTooltipPosition="right" (click)="openDialog(1, row.userName, row)" [disabled]="currentUser.id === row.id">
+          <mat-icon>edit</mat-icon>
+        </button></div></td>
+      </ng-container>
+
+      <ng-container matColumnDef="role">
+        <th mat-header-cell *matHeaderCellDef>Уровень доступа</th>
+        <td mat-cell *matCellDef="let row"><div class="cell-container">{{row.role | role}}<button mat-icon-button color="primary" matTooltip="Редактировать" matTooltipPosition="right" (click)="openDialog(2, row.role, row)" [disabled]="currentUser.id === row.id"> 
+          <mat-icon>edit</mat-icon>
+        </button></div></td>
+      </ng-container>
+
+      <ng-container matColumnDef="created">
+        <th mat-header-cell *matHeaderCellDef>Дата регистрации</th>
+        <td mat-cell *matCellDef="let row">{{row.createdAt | date:'medium'}}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+
+  <mat-paginator [length]="resultsLength" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 50]"></mat-paginator>
+</div>

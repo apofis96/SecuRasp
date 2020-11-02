@@ -22,7 +22,6 @@ export class ErrorInterceptor implements HttpInterceptor {
                                         Authorization: `Bearer ${resp.accessToken}`
                                     }
                                 });
-
                                 return next.handle(req);
                             })
                         );
@@ -39,12 +38,12 @@ export class ErrorInterceptor implements HttpInterceptor {
                         }
                     }
                 }
-
-                console.log(response);
+                if ( (response as HttpErrorResponse).status === 0) {
+                    return throwError('Ошибка связи с сервером');
+                }
                 const error = response.error
-                    ? response.error.error || response.error.message
+                    ? response.error.error || response.error.message || Object.entries(response.error).toString()
                     : response.message || `${response.status} ${response.statusText}`;
-
                 return throwError(error);
             })
         );

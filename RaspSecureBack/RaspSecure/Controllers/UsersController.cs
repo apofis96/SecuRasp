@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RaspSecure.Extensions;
+using RaspSecure.Models.Auth;
 using RaspSecure.Models.DTO;
 using RaspSecure.Services;
 using System.Collections.Generic;
@@ -22,9 +23,9 @@ namespace RaspSecure.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<ICollection<UserDTO>>> Get()
+        public async Task<ActionResult<UsersListD>> Get(string sort = "asc", int page = 0, int size = 10, bool unactive = false)
         {
-            return Ok(await _userService.GetUsers());
+            return Ok(await _userService.GetUsers(sort, page, size, unactive));
         }
 
         [HttpGet("{id}")]
@@ -46,6 +47,15 @@ namespace RaspSecure.Controllers
             await _userService.UpdateUser(user, this.GetUserIdFromToken());
             return NoContent();
         }
+
+        [Authorize(Roles = nameof(RolesEnum.Admin))]
+        [HttpPut("adminEdit")]
+        public async Task<IActionResult> PutEdmin([FromBody] UserDTO user)
+        {
+            await _userService.AdminUserEdit(user, this.GetUserIdFromToken());
+            return NoContent();
+        }
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)

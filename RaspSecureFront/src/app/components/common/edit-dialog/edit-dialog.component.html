@@ -1,0 +1,31 @@
+<h1 mat-dialog-title>{{title}}</h1>
+<mat-dialog-content>
+    <form name="authForm" #authForm="ngForm">
+    <mat-form-field *ngIf="data.type === 0" appearance="outline" class="form-field">
+    <mat-label>Адрес почты</mat-label>
+      <input name="authEmail" [(ngModel)]="data.value" #_email="ngModel" matInput required email>
+      <mat-error class="error-message" *ngIf="_email.invalid">Некорректный адрес</mat-error>
+    </mat-form-field>
+    <mat-form-field *ngIf="data.type === 1" appearance="outline" class="form-field">
+        <mat-label>Имя</mat-label>
+        <input name="authName" [(ngModel)]="data.value" #_name="ngModel" matInput required pattern=".{1,40}">
+        <mat-error class="error-message" *ngIf="_name.invalid">До 40 символов</mat-error>
+    </mat-form-field>
+    <mat-form-field *ngIf="data.type === 2" appearance="outline" class="form-field">
+        <mat-label>Уровень доступа</mat-label>
+        <mat-select name="authRole" [(ngModel)]="data.value" #_role="ngModel" matInput required>
+            <mat-option value="0">{{0 | role}}</mat-option>
+            <mat-option value="2">{{2 | role}}</mat-option>
+            <mat-option value="3">{{3 | role}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    </form>
+
+</mat-dialog-content>
+<mat-dialog-actions class="edit-actions">
+  <button mat-raised-button class="edit-btn" (click)="onNoClick()">Закрыть</button>
+  <button mat-raised-button class="edit-btn"
+    [mat-dialog-close]="data.value"
+    cdkFocusInitial color="primary"
+    [disabled]="authForm.invalid">Сохранить</button>
+</mat-dialog-actions>

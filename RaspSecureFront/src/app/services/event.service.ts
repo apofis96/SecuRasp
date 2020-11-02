@@ -8,7 +8,14 @@ export class EventService {
     private onUserChanged = new Subject<User>();
     public userChangedEvent$ = this.onUserChanged.asObservable();
 
+    private onRoleChanged = new Subject<void>();
+    public roleChangedEvent$ = this.onRoleChanged.asObservable();
+
     public userChanged(user: User) {
         this.onUserChanged.next(user);
+    }
+
+    public roleChanged() {
+        this.onRoleChanged.next();
     }
 }
